@@ -4,8 +4,6 @@ import com.example.demo.model.Actor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 @Service
