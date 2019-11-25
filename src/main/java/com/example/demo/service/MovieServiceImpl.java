@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Actor;
 import com.example.demo.model.Movie;
 import com.example.demo.repository.MovieRepository;
 import com.mongodb.client.result.UpdateResult;
@@ -21,11 +22,21 @@ public class MovieServiceImpl implements MovieService {
     MovieRepository movieRepository;
 
     @Autowired
+    ActorService actorService;
+
+    @Autowired
     MongoTemplate mongoTemplate;
 
     @Override
     public Collection<Movie> getAllMovies() {
-        return movieRepository.findAll();
+        Collection<Movie> movies = movieRepository.findAll();
+
+        for(Movie movie : movies) {
+            List<Actor> movieActors = actorService.getMovieActors(movie.getName());
+            movie.setActors(movieActors);
+        }
+
+        return movies;
     }
 
     @Override
