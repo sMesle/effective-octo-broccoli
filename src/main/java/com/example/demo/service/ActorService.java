@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Actor;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,18 +11,24 @@ import java.util.List;
 @Service
 public class ActorService {
 
-    @HystrixCommand(fallbackMethod = "defaultActors")
-    public List<Actor> getMovieActors(String movieName) {
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
-        String sUrl = "http://localhost:5000/actors/movie/" + movieName;
-
-        RestTemplate restTemplate = new RestTemplate();
-        List<Actor> actorList = restTemplate.getForObject(sUrl, List.class);
-
-        return actorList;
+    public ActorService(CircuitBreakerFactory circuitBreakerFactory) {
+        this.circuitBreakerFactory = circuitBreakerFactory;
     }
 
-    public List<Actor> defaultActors(String movieName) {
+    public List<Actor> getMovieActors(String movieName) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        return circuitBreakerFactory.create("getMovieActors").run(
+                () -> (List<Actor>) restTemplate.getForObject("http://localhost:5000/actors/movie/" + movieName, List.class),
+                t -> {
+                    return defaultActors();
+                }
+        );
+    }
+
+    public List<Actor> defaultActors() {
         List<Actor> defaultListActors = new ArrayList<>();
         Actor defaultActor = new Actor("default","actor", null);
         defaultListActors.add(defaultActor);
