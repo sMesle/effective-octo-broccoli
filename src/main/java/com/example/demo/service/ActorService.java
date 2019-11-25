@@ -22,9 +22,7 @@ public class ActorService {
 
         return circuitBreakerFactory.create("getMovieActors").run(
                 () -> (List<Actor>) restTemplate.getForObject("http://localhost:5000/actors/movie/" + movieName, List.class),
-                t -> {
-                    return defaultActors();
-                }
+                t -> defaultActors()
         );
     }
 
