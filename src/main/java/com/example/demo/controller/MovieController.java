@@ -5,6 +5,7 @@ import com.example.demo.model.Movie;
 import com.example.demo.service.ActorService;
 import com.example.demo.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -12,6 +13,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+
+@EnableCircuitBreaker
 @RestController
 @RequestMapping("/movies")
 public class MovieController {

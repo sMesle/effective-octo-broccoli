@@ -4,10 +4,25 @@ public class Actor {
 
     private String firstname;
     private String lastname;
+    private String movieName;
+
+    public Actor(String firstname, String lastname, String movieName) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.movieName = movieName;
+    }
 
     public Actor(String firstname, String lastname) {
         this.firstname = firstname;
         this.lastname = lastname;
+    }
+
+    public String getMovieName() {
+        return movieName;
+    }
+
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
     }
 
     public String getFirstname() {
