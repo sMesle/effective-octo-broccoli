@@ -21,7 +21,7 @@ public class ActorService {
         RestTemplate restTemplate = new RestTemplate();
 
         return circuitBreakerFactory.create("getMovieActors").run(
-                () -> (List<Actor>) restTemplate.getForObject("http://localhost:5000/actors/movie/" + movieName, List.class),
+                () -> (List<Actor>) restTemplate.getForObject("http://apppython:5000/actors/movie/" + movieName, List.class),
                 t -> defaultActors()
         );
     }
